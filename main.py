@@ -20,8 +20,8 @@ class WindowClass(QMainWindow, form_class) :
     def button1Function(self) :
         self.txtwindow.setPlainText('준비중...')
         last_number = crawl_lastest_num()
-        self.txtwindow.setPlainText(f'{last_number}개 회차별 당첨번호 수집완료!')
         lotto_datas = chcek_lotto_data(last_number)
+        self.txtwindow.setPlainText(f'{last_number}개 회차별 당첨번호 수집완료!')
         self.txtwindow.append('준비완료! 추천 버튼을 눌러주세요!')
         self.lotto_datas = lotto_datas
 

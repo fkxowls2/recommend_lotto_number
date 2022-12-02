@@ -61,7 +61,6 @@ def chcek_lotto_data(last_num):
         
         num_lotto_data = len(lotto_data)
         if num_lotto_data != last_num:
-            new_num = last_num - num_lotto_data
             lotto_data = crawl_lotto_num(last_num, num_start=num_lotto_data+1)
     except:
         print('당첨번호 데이터가 없어서 데이터를 수집합니다...')
