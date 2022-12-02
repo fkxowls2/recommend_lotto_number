@@ -1,7 +1,6 @@
 altgraph==0.17.3
 beautifulsoup4==4.11.1
 bs4==0.0.1
-certifi @ file:///C:/b/abs_ac29jvt43w/croot/certifi_1665076682579/work/certifi
 future==0.18.2
 numpy==1.23.3
 pefile==2022.5.30
