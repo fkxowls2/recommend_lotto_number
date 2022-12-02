@@ -1,3 +1,4 @@
+python version 3.8
 UI디자인 프로그램 실행 명령어
 $ designer
 실행파일 생성 명령어

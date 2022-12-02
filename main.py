@@ -20,7 +20,7 @@ class WindowClass(QMainWindow, form_class) :
     def button1Function(self) :
         self.txtwindow.setPlainText('준비중...')
         last_number = crawl_lastest_num()
-        self.txtwindow.append(f'{last_number}개 회차별 당첨번호 수집완료')
+        self.txtwindow.setPlainText(f'{last_number}개 회차별 당첨번호 수집완료!')
         lotto_datas = chcek_lotto_data(last_number)
         self.txtwindow.append('준비완료! 추천 버튼을 눌러주세요!')
         self.lotto_datas = lotto_datas
@@ -29,8 +29,9 @@ class WindowClass(QMainWindow, form_class) :
         try:
             self.txtwindow.setPlainText('추천 번호 추출중...')
             results = recommand_lotto_sets(self.lotto_datas, sets_num=self.spinBox.value())
-            self.txtwindow.append('추천 번호 검증중...')
+            self.txtwindow.setPlainText('추천 번호 검증중...')
             validation_and_display(results, self.lotto_datas)
+            self.txtwindow.setPlainText('추천 번호!!!')
             for lotto_nums in results:
                 self.txtwindow.append( str(lotto_nums) )
         except:
