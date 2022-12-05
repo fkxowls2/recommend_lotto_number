@@ -1,6 +1,7 @@
-import sys
-from PyQt5.QtWidgets import *
 from PyQt5 import uic
+from PyQt5.QtWidgets import QMainWindow, QApplication, QProgressBar
+from PyQt5.QtCore import QThread
+import sys
 from lotto import *
 
 
@@ -13,14 +14,37 @@ class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
-        
         self.btn1.clicked.connect(self.button1Function)
         self.btn2.clicked.connect(self.button2Function)
     
     def button1Function(self) :
         self.txtwindow.setPlainText('준비중...')
         last_number = crawl_lastest_num()
-        lotto_datas = chcek_lotto_data(last_number)
+        lotto_datas, chk_result = chcek_lotto_data(last_number)
+        
+        if chk_result == 'false':
+            self.txtwindow.append('추가 당첨번호 데이터를 수집합니다...')
+            start_num, last_num = len(lotto_datas)+1, last_number+1
+            self.progressBar.setRange(start_num, last_num)
+            for i in range(start_num, last_num):
+                lotto_datas.append(crawl_lotto_num(i))
+                self.progressBar.setValue(i)
+
+        elif chk_result == 'none':
+            self.txtwindow.append('당첨번호 데이터가 없어서 데이터를 수집합니다...')
+            start_num, last_num = 1, last_number+1
+            self.progressBar.setRange(start_num, last_num)
+            for i in range(start_num, last_num):
+                lotto_datas.append(crawl_lotto_num(i))
+                self.progressBar.setValue(i)
+                
+        else:
+            start_num, last_num = 1, 100
+            self.progressBar.setRange(start_num, last_num)
+            self.progressBar.setValue(100)
+                
+        with open("lotto.pkl", "wb") as f:
+            pickle.dump(lotto_datas, f)
         self.txtwindow.setPlainText(f'{last_number}개 회차별 당첨번호 수집완료!')
         self.txtwindow.append('준비완료! 추천 버튼을 눌러주세요!')
         self.lotto_datas = lotto_datas
@@ -30,10 +54,13 @@ class WindowClass(QMainWindow, form_class) :
             self.txtwindow.setPlainText('추천 번호 추출중...')
             results = recommand_lotto_sets(self.lotto_datas, sets_num=self.spinBox.value())
             self.txtwindow.setPlainText('추천 번호 검증중...')
-            validation_and_display(results, self.lotto_datas)
-            self.txtwindow.setPlainText('추천 번호!!!')
-            for lotto_nums in results:
-                self.txtwindow.append( str(lotto_nums) )
+            val_result = lotto_validation(results, self.lotto_datas)
+            if val_result == True:
+                self.txtwindow.setPlainText('추천 번호!!!')
+                for lotto_nums in results:
+                    self.txtwindow.append( str(lotto_nums) )
+            else :
+                self.txtwindow.setPlainText('중복 번호 발생! 추천 버튼을 다시 눌러주세요!')
         except:
             self.txtwindow.setPlainText('준비 버튼을 먼저 눌러주세요!!!')
             
