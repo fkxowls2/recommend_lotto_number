@@ -18,23 +18,23 @@ class WindowClass(QMainWindow, form_class) :
         self.btn2.clicked.connect(self.button2Function)
     
     def button1Function(self) :
-        self.txtwindow.setPlainText('준비중...')
+        self.txtwindow.setPlainText('준비중... 창을 움직이지 말아주세요')
         last_number = crawl_lastest_num()
         lotto_datas, chk_result = chcek_lotto_data(last_number)
         
         if chk_result == 'false':
             self.txtwindow.append('추가 당첨번호 데이터를 수집합니다...')
-            start_num, last_num = len(lotto_datas)+1, last_number+1
+            start_num, last_num = len(lotto_datas), last_number
             self.progressBar.setRange(start_num, last_num)
-            for i in range(start_num, last_num):
+            for i in range(start_num+1, last_num+1):
                 lotto_datas.append(crawl_lotto_num(i))
                 self.progressBar.setValue(i)
 
         elif chk_result == 'none':
             self.txtwindow.append('당첨번호 데이터가 없어서 데이터를 수집합니다...')
-            start_num, last_num = 1, last_number+1
+            start_num, last_num = 1, last_number
             self.progressBar.setRange(start_num, last_num)
-            for i in range(start_num, last_num):
+            for i in range(start_num, last_num+1):
                 lotto_datas.append(crawl_lotto_num(i))
                 self.progressBar.setValue(i)
                 
